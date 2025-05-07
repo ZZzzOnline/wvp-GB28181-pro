@@ -83,7 +83,9 @@ export default {
   //   ro.observe(this.$refs.container);
   // },
   mounted() {
-    this.updatePlayerDomSize()
+    this.$nextTick(() => {
+      this.updatePlayerDomSize()
+    })
   },
   destroyed() {
     if (jessibucaPlayer[this._uid]) {
