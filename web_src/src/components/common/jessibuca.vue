@@ -1,6 +1,6 @@
 <template>
   <div ref="container" @dblclick="fullscreenSwich"
-       style="width:100%; height: 100%; background-color: #000000;margin:0 auto;position: relative;">
+    style="width:100%; height: 100%; background-color: #000000;margin:0 auto;position: relative;">
     <div style="width:100%; padding-top: 56.25%; position: relative;"></div>
     <div class="buttons-box" id="buttonsBox">
       <div class="buttons-box-left">
@@ -15,7 +15,7 @@
         <!--          <i class="iconfont icon-file-record1 jessibuca-btn"></i>-->
         <!--          <i class="iconfont icon-xiangqing2 jessibuca-btn" ></i>-->
         <i class="iconfont icon-camera1196054easyiconnet jessibuca-btn" @click="screenshot"
-           style="font-size: 1rem !important"></i>
+          style="font-size: 1rem !important"></i>
         <i class="iconfont icon-shuaxin11 jessibuca-btn" @click="playBtnClick"></i>
         <i v-if="!fullscreen" class="iconfont icon-weibiaoti10 jessibuca-btn" @click="fullscreenSwich"></i>
         <i v-if="fullscreen" class="iconfont icon-weibiaoti11 jessibuca-btn" @click="fullscreenSwich"></i>
@@ -67,8 +67,10 @@ export default {
   //   });
   //   ro.observe(this.$refs.container);
   // },
-  mounted(){
-    this.updatePlayerDomSize();
+  mounted() {
+    this.$nextTick(() => {
+      this.updatePlayerDomSize();
+    });
   },
   watch: {
     videoUrl: {
@@ -145,7 +147,7 @@ export default {
         wcsUseVideoRender: true
       };
       console.log("Jessibuca -> options: ", options);
-      jessibucaPlayer[this._uid] = new window.Jessibuca({...options});
+      jessibucaPlayer[this._uid] = new window.Jessibuca({ ...options });
 
       let jessibuca = jessibucaPlayer[this._uid];
       let _this = this;
