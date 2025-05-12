@@ -694,7 +694,7 @@ export default {
         })
     },
     stopBroadcast() {
-      this.broadcastRtc.close()
+      this.broadcastRtc?.close()
       this.broadcastStatus = -1
       this.$store.dispatch('play/broadcastStop', [this.deviceId, this.channelId])
     }
