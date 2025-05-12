@@ -582,13 +582,13 @@ export default {
       })
     },
     getBroadcastStatus() {
-      if (this.broadcastStatus == -2) {
+      if (this.broadcastStatus === -2) {
         return 'primary'
       }
-      if (this.broadcastStatus == -1) {
+      if (this.broadcastStatus === -1) {
         return 'primary'
       }
-      if (this.broadcastStatus == 0) {
+      if (this.broadcastStatus === 0) {
         return 'warning'
       }
       if (this.broadcastStatus === 1) {

@@ -1,4 +1,7 @@
 module.exports = {
+  globals: {
+    ZLMRTCClient: 'readonly',
+  },
   root: true,
   parserOptions: {
     parser: 'babel-eslint',
