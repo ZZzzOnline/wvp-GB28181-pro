@@ -64,7 +64,9 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    // 调试
+    devtool: 'source-map'
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
