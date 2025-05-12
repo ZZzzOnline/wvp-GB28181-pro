@@ -231,7 +231,7 @@ export default {
       jessibucaPlayer[this._uid].on('play', () => {
         this.playing = true
         this.loaded = true
-        this.quieting = jessibuca.quieting
+        this.quieting = window.jessibuca.quieting
       })
       if (jessibucaPlayer[this._uid].hasLoaded()) {
         jessibucaPlayer[this._uid].play(url)
