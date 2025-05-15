@@ -38,6 +38,7 @@ Vue.use(Contextmenu)
 Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
+Vue.config.devtools = true
 
 Vue.prototype.$channelTypeList = {
   1: { id: 1, name: '国标设备', style: { color: '#409eff', borderColor: '#b3d8ff' }},
