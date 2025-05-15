@@ -56,6 +56,7 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+    <devicePlayer ref="devicePlayer" />
   </div>
 </template>
 <script>
@@ -63,11 +64,12 @@
 import player from '../common/jessibuca.vue'
 import DeviceTree from '../common/DeviceTree.vue'
 import screenFull from 'screenfull'
+import devicePlayer from '@/views/dialog/devicePlayer.vue'
 
 export default {
   name: 'Live',
   components: {
-    player, DeviceTree
+    player, DeviceTree, devicePlayer
   },
 
   data() {
@@ -268,7 +270,32 @@ export default {
     },
     parentMethod(data) {
       console.log('parentMethod:', data)
-      this.dialogVisible = true
+      // this.dialogVisible = true
+
+      // zjh
+      const itemData = { deviceId: '34020000001320024401', hasAudio: false }
+      const deviceId = '34020000001320000244'
+      const channelId = itemData.deviceId
+      itemData.playLoading = true
+      console.log('通知设备推流1：' + deviceId + ' : ' + channelId)
+      this.$store.dispatch('play/play', [deviceId, channelId])
+        .then((data) => {
+          setTimeout(() => {
+            const snapId = deviceId + '_' + channelId
+            this.loadSnap[deviceId + channelId] = 0
+            this.getSnapErrorEvent(snapId)
+          }, 5000)
+          itemData.streamId = data.stream
+          this.$refs.devicePlayer.openDialog('media', deviceId, channelId, {
+            streamInfo: data,
+            hasAudio: itemData.hasAudio
+          })
+          setTimeout(() => {
+            this.initData()
+          }, 1000)
+        }).finally(() => {
+          itemData.playLoading = false
+        })
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
