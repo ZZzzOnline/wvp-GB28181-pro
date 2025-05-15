@@ -4,36 +4,26 @@
     <el-dialog
       v-if="showVideoDialog"
       v-el-drag-dialog
-      title="视频播放"
+      title="设备控制"
       top="0"
       :close-on-click-modal="false"
       :visible.sync="showVideoDialog"
       @close="close()"
     >
       <div style="width: 100%; height: 100%">
-        <el-tabs
-          v-if="Object.keys(this.player).length > 1"
-          v-model="activePlayer"
-          type="card"
-          :stretch="true"
-          @tab-click="changePlayer"
-        >
-          <el-tab-pane label="WebRTC" name="webRTC">
-            <rtc-player
-              v-if="activePlayer === 'webRTC'"
-              ref="webRTC"
-              :visible.sync="showVideoDialog"
-              :video-url="videoUrl"
-              :error="videoError"
-              :message="videoError"
-              height="100px"
-              :has-audio="hasAudio"
-              fluent
-              autoplay
-              live
-            />
-          </el-tab-pane>
-        </el-tabs>
+        <rtc-player
+          v-if="activePlayer === 'webRTC'"
+          ref="webRTC"
+          :visible.sync="showVideoDialog"
+          :video-url="videoUrl"
+          :error="videoError"
+          :message="videoError"
+          height="100px"
+          :has-audio="hasAudio"
+          fluent
+          autoplay
+          live
+        />
         <rtc-player
           v-if="Object.keys(this.player).length == 1 && this.player.webRTC"
           ref="jessibuca"
@@ -55,70 +45,68 @@
           <el-tab-pane v-if="showPtz" label="云台控制" name="control">
             <div style="display: grid; grid-template-columns: 240px auto; height: 180px; overflow: auto">
               <div style="display: grid; grid-template-columns: 6.25rem auto;">
-
                 <div class="control-wrapper">
                   <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
-                    <i class="el-icon-caret-top" />
-                    <div class="control-inner-btn control-inner" />
+                    <i class="el-icon-caret-top"/>
+                    <div class="control-inner-btn control-inner"/>
                   </div>
                   <div class="control-btn control-left" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
-                    <i class="el-icon-caret-left" />
-                    <div class="control-inner-btn control-inner" />
+                    <i class="el-icon-caret-left"/>
+                    <div class="control-inner-btn control-inner"/>
                   </div>
                   <div class="control-btn control-bottom" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
-                    <i class="el-icon-caret-bottom" />
-                    <div class="control-inner-btn control-inner" />
+                    <i class="el-icon-caret-bottom"/>
+                    <div class="control-inner-btn control-inner"/>
                   </div>
                   <div class="control-btn control-right" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
-                    <i class="el-icon-caret-right" />
-                    <div class="control-inner-btn control-inner" />
+                    <i class="el-icon-caret-right"/>
+                    <div class="control-inner-btn control-inner"/>
                   </div>
                   <div class="control-round">
-                    <div class="control-round-inner"><i class="fa fa-pause-circle" /></div>
+                    <div class="control-round-inner"><i class="fa fa-pause-circle"/></div>
                   </div>
                   <div class="contro-speed" style="position: absolute; left: 4px; top: 7rem; width: 6.25rem;">
-                    <el-slider v-model="controSpeed" :max="100" />
+                    <el-slider v-model="controSpeed" :max="100"/>
                   </div>
                 </div>
                 <div>
                   <div class="ptz-btn-box">
                     <div style="" title="变倍+" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-zoom-in control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="el-icon-zoom-in control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                     <div style="" title="变倍-" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-zoom-out control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="el-icon-zoom-out control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                   </div>
                   <div class="ptz-btn-box">
                     <div title="聚焦+" @mousedown="focusCamera('near')" @mouseup="focusCamera('stop')">
-                      <i class="iconfont icon-bianjiao-fangda control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="iconfont icon-bianjiao-fangda control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                     <div title="聚焦-" @mousedown="focusCamera('far')" @mouseup="focusCamera('stop')">
-                      <i class="iconfont icon-bianjiao-suoxiao control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="iconfont icon-bianjiao-suoxiao control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                   </div>
                   <div class="ptz-btn-box">
                     <div title="光圈+" @mousedown="irisCamera('in')" @mouseup="irisCamera('stop')">
-                      <i class="iconfont icon-guangquan control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="iconfont icon-guangquan control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                     <div title="光圈-" @mousedown="irisCamera('out')" @mouseup="irisCamera('stop')">
-                      <i class="iconfont icon-guangquan- control-zoom-btn" style="font-size: 1.5rem;" />
+                      <i class="iconfont icon-guangquan- control-zoom-btn" style="font-size: 1.5rem;"/>
                     </div>
                   </div>
                 </div>
+                <div>
+                  <el-form :inline="true" label-width="80px">
+                    <el-form-item label="预置点号">
+                      <el-input v-model="presetPoint" placeholder="请输入预置点号" style="width: 200px;"/>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="clickSetPreset()">设置</el-button>
+                      <el-button type="danger" @click="clickGoPreset()">调用</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
               </div>
-<!--              <div style="text-align: left">-->
-<!--                <el-select-->
-<!--                  v-model="ptzMethod"-->
-<!--                  style="width: 100%"-->
-<!--                  size="mini"-->
-<!--                  placeholder="请选择云台功能"-->
-<!--                >-->
-<!--                  <el-option label="预置点" value="preset" />-->
-<!--                </el-select>-->
-
-<!--                <ptzPreset v-if="ptzMethod === 'preset'" :channel-device-id="channelId" :device-id="deviceId" style="margin-top: 1rem" />-->
-<!--              </div>-->
             </div>
           </el-tab-pane>
           <el-tab-pane v-if="showBroadcast" label="语音对讲" name="broadcast">
@@ -160,13 +148,12 @@
 import elDragDialog from '@/directive/el-drag-dialog'
 import crypto from 'crypto'
 import rtcPlayer from '../common/rtcPlayer.vue'
-import PtzPreset from '../common/ptzPreset.vue'
 
 export default {
   name: 'DeviceControl',
   directives: { elDragDialog },
   components: {
-    PtzPreset, rtcPlayer
+    rtcPlayer
   },
   props: {},
   data() {
@@ -671,9 +658,11 @@ export default {
   width: 80%;
   padding: 0 10%;
 }
-.el-dialog__body{
+
+.el-dialog__body {
   padding: 10px 20px;
 }
+
 .ptz-btn-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
