@@ -56,7 +56,7 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
-    <devicePlayer ref="devicePlayer" />
+    <deviceControl ref="deviceControl" />
   </div>
 </template>
 <script>
@@ -64,12 +64,12 @@
 import player from '../common/jessibuca.vue'
 import DeviceTree from '../common/DeviceTree.vue'
 import screenFull from 'screenfull'
-import devicePlayer from '@/views/dialog/devicePlayer.vue'
+import deviceControl from '@/views/dialog/deviceControl.vue'
 
 export default {
   name: 'Live',
   components: {
-    player, DeviceTree, devicePlayer
+    player, DeviceTree, deviceControl
   },
 
   data() {
@@ -280,19 +280,19 @@ export default {
       console.log('通知设备推流1：' + deviceId + ' : ' + channelId)
       this.$store.dispatch('play/play', [deviceId, channelId])
         .then((data) => {
-          setTimeout(() => {
-            const snapId = deviceId + '_' + channelId
-            this.loadSnap[deviceId + channelId] = 0
-            this.getSnapErrorEvent(snapId)
-          }, 5000)
+          // setTimeout(() => {
+          //   const snapId = deviceId + '_' + channelId
+          //   this.loadSnap[deviceId + channelId] = 0
+          //   this.getSnapErrorEvent(snapId)
+          // }, 5000)
           itemData.streamId = data.stream
-          this.$refs.devicePlayer.openDialog('media', deviceId, channelId, {
+          this.$refs.deviceControl.openDialog('control', deviceId, channelId, {
             streamInfo: data,
             hasAudio: itemData.hasAudio
           })
-          setTimeout(() => {
-            this.initData()
-          }, 1000)
+          // setTimeout(() => {
+          //   this.initData()
+          // }, 1000)
         }).finally(() => {
           itemData.playLoading = false
         })
