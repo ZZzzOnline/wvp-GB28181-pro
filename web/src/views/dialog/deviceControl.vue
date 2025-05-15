@@ -43,73 +43,58 @@
           <!--{"code":0,"data":{"paths":["22-29-30.mp4"],"rootPath":"/home/kkkkk/Documents/ZLMediaKit/release/linux/Debug/www/record/hls/kkkkk/2020-05-11/"}}-->
           <!--遥控界面-->
           <el-tab-pane v-if="showPtz" label="设备控制" name="control" style="display: flex;">
-            <!--云台-->
-            <div style="display: grid; grid-template-columns: 50% 50%; width: 50%; height: 200px; overflow: auto">
-              <div style="display: grid; grid-template-columns: 6.25rem auto auto;">
-                <div>
-                  <div class="control-wrapper">
-                    <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-caret-top"/>
-                    </div>
-                    <div class="control-btn control-left" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-caret-left"/>
-                    </div>
-                    <div class="control-btn control-bottom" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-caret-bottom"/>
-                    </div>
-                    <div class="control-btn control-right" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-caret-right"/>
-                    </div>
-                    <div class="control-round">
-                      <div class="control-round-inner"><i class="fa fa-pause-circle"/></div>
-                    </div>
-                    <div class="contro-speed" style="position: absolute; left: 4px; top: 6.5rem; width: 6.25rem;">
-                      <el-slider v-model="controSpeed" :max="100"/>
-                    </div>
+            <div style="display: grid; grid-template-columns: 6.25rem auto auto auto; ">
+              <!--云台-->
+              <div>
+                <div class="control-wrapper">
+                  <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-caret-top"/>
                   </div>
-                </div>
-                <div>
-                  <div class="ptz-btn-box">
-                    <div style="" title="变倍+" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-zoom-in control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
-                    <div style="" title="变倍-" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')">
-                      <i class="el-icon-zoom-out control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
+                  <div class="control-btn control-left" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-caret-left"/>
                   </div>
-                  <div class="ptz-btn-box">
-                    <div title="聚焦+" @mousedown="focusCamera('near')" @mouseup="focusCamera('stop')">
-                      <i class="iconfont icon-bianjiao-fangda control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
-                    <div title="聚焦-" @mousedown="focusCamera('far')" @mouseup="focusCamera('stop')">
-                      <i class="iconfont icon-bianjiao-suoxiao control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
+                  <div class="control-btn control-bottom" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-caret-bottom"/>
                   </div>
-                  <div class="ptz-btn-box">
-                    <div title="光圈+" @mousedown="irisCamera('in')" @mouseup="irisCamera('stop')">
-                      <i class="iconfont icon-guangquan control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
-                    <div title="光圈-" @mousedown="irisCamera('out')" @mouseup="irisCamera('stop')">
-                      <i class="iconfont icon-guangquan- control-zoom-btn" style="font-size: 1.5rem;"/>
-                    </div>
+                  <div class="control-btn control-right" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-caret-right"/>
                   </div>
-                </div>
-                <div style="margin-left: -20px;">
-                  <el-form>
-                    <el-form-item label="云台预置点" label-width="90px">
-                      <el-input v-model="presetPoint" placeholder="请输入编号" style="width: 100px;" />
-                    </el-form-item>
-                    <el-form-item style="display: flex; justify-content: space-between;">
-                      <el-button type="primary" size="mini" @click="clickSetPreset()">设置</el-button>
-                      <el-button type="danger" size="mini" @click="clickGoPreset()">调用</el-button>
-                    </el-form-item>
-                  </el-form>
+                  <div class="control-round">
+                    <div class="control-round-inner"><i class="fa fa-pause-circle"/></div>
+                  </div>
+                  <div class="contro-speed" style="position: absolute; left: 4px; top: 6.5rem; width: 6.25rem;">
+                    <el-slider v-model="controSpeed" :max="100"/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!--轨道机器人-->
-            <div style="display: grid; grid-template-columns: 50% 50%; width: 50%; height: 200px; overflow: auto">
-              <div style="display: grid; grid-template-columns: 6.25rem auto auto;">
+              <div style="margin-left: 10px;">
+                <div class="ptz-btn-box">
+                  <div style="" title="变倍+" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-zoom-in control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                  <div style="" title="变倍-" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')">
+                    <i class="el-icon-zoom-out control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                </div>
+                <div class="ptz-btn-box">
+                  <div title="聚焦+" @mousedown="focusCamera('near')" @mouseup="focusCamera('stop')">
+                    <i class="iconfont icon-bianjiao-fangda control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                  <div title="聚焦-" @mousedown="focusCamera('far')" @mouseup="focusCamera('stop')">
+                    <i class="iconfont icon-bianjiao-suoxiao control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                </div>
+                <div class="ptz-btn-box">
+                  <div title="光圈+" @mousedown="irisCamera('in')" @mouseup="irisCamera('stop')">
+                    <i class="iconfont icon-guangquan control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                  <div title="光圈-" @mousedown="irisCamera('out')" @mouseup="irisCamera('stop')">
+                    <i class="iconfont icon-guangquan- control-zoom-btn" style="font-size: 1.5rem;"/>
+                  </div>
+                </div>
+              </div>
+              <!--轨道机器人圈-->
+              <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto;">
                 <div>
                   <div class="control-wrapper">
                     <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
@@ -132,17 +117,17 @@
                     </div>
                   </div>
                 </div>
-                <div style="margin-left: 20px;">
-                  <el-form>
-                    <el-form-item label="轨道机预置点" label-width="100px">
-                      <el-input v-model="presetPoint2" placeholder="请输入编号" style="width: 100px;" />
-                    </el-form-item>
-                    <el-form-item style="display: flex; justify-content: space-between;">
-                      <el-button type="primary" size="mini" @click="clickSetPreset()">设置</el-button>
-                      <el-button type="danger" size="mini" @click="clickGoPreset()">调用</el-button>
-                    </el-form-item>
-                  </el-form>
-                </div>
+              </div>
+              <div style="margin-left: 50px;">
+                <el-form style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                  <el-form-item label="公共预置点" label-width="90px" style="margin-right: 20px;">
+                    <el-input v-model="presetPoint" placeholder="请输入编号" style="width: 100px;" />
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" @click="clickSetPreset()">设置</el-button>
+                    <el-button type="danger" size="mini" @click="clickGoPreset()">调用</el-button>
+                  </el-form-item>
+                </el-form>
               </div>
             </div>
           </el-tab-pane>
@@ -241,8 +226,7 @@ export default {
       broadcastMode: true,
       broadcastRtc: null,
       broadcastStatus: -1, // -2 正在释放资源 -1 默认状态 0 等待接通 1 接通成功
-      presetPoint: '',
-      presetPoint2: ''
+      presetPoint: ''
     }
   },
   computed: {
