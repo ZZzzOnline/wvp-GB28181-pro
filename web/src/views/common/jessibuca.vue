@@ -35,7 +35,7 @@
 const jessibucaPlayer = {}
 export default {
   name: 'Jessibuca',
-  props: ['videoUrl', 'error', 'hasAudio', 'height', 'on-call-parent'],
+  props: ['videoUrl', 'videoStream', 'error', 'hasAudio', 'height', 'on-call-parent'],
   data() {
     return {
       playing: false,
@@ -251,8 +251,8 @@ export default {
       this.performance = ''
     },
     onCallChild: function() {
-      console.log('onCallChild', this._uid)
-      this.$props['onCallParent'](this._uid)
+      console.log('onCallChild', this.videoStream)
+      this.$props['onCallParent'](this.videoStream)
     },
     screenshot: function() {
       if (jessibucaPlayer[this._uid]) {

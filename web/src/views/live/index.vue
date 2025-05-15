@@ -34,6 +34,7 @@
                 v-else
                 :ref="'player'[i-1]"
                 :video-url="videoUrl[i-1]"
+                :video-stream="videoStream[i-1]"
                 :on-call-parent="parentMethod"
                 fluent
                 autoplay
@@ -78,6 +79,7 @@ export default {
       videoTip: [''],
       spiltIndex: 2, // 分屏
       playerIdx: 0, // 激活播放器
+      videoStream: [''],
 
       updateLooper: 0, // 数据刷新轮训标志
       count: 15,
@@ -205,6 +207,7 @@ export default {
             videoUrl = data.ws_flv
           }
           this.setPlayUrl(videoUrl, idxTmp)
+          this.setPlayStream(data.stream, idxTmp)
         })
         .catch(err => {
           this.$set(this.videoTip, idxTmp, '播放失败: ' + err)
@@ -218,6 +221,13 @@ export default {
       const _this = this
       setTimeout(() => {
         window.localStorage.setItem('videoUrl', JSON.stringify(_this.videoUrl))
+      }, 100)
+    },
+    setPlayStream(stream, idx) {
+      this.$set(this.videoStream, idx, stream)
+      const _this = this
+      setTimeout(() => {
+        window.localStorage.setItem('videoStream', JSON.stringify(_this.videoStream))
       }, 100)
     },
     checkPlayByParam() {
@@ -268,13 +278,21 @@ export default {
         screenFull.toggle(this.$refs.playBox)
       }
     },
+    // zjh
     parentMethod(data) {
-      console.log('parentMethod:', data)
       // this.dialogVisible = true
-
-      // zjh
-      const itemData = { deviceId: '34020000001320024401', hasAudio: false }
-      const deviceId = '34020000001320000244'
+      console.log('parentMethod:', data)
+      const pieces = data.split('_')
+      if (pieces.length < 2) {
+        this.$message({
+          showClose: true,
+          message: '参数错误',
+          type: 'error'
+        })
+        return
+      }
+      const itemData = { deviceId: pieces[1], hasAudio: false }
+      const deviceId = pieces[0]
       const channelId = itemData.deviceId
       itemData.playLoading = true
       console.log('通知设备推流1：' + deviceId + ' : ' + channelId)
