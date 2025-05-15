@@ -107,18 +107,18 @@
                   </div>
                 </div>
               </div>
-              <div style="text-align: left">
-                <el-select
-                  v-model="ptzMethod"
-                  style="width: 100%"
-                  size="mini"
-                  placeholder="请选择云台功能"
-                >
-                  <el-option label="预置点" value="preset" />
-                </el-select>
+<!--              <div style="text-align: left">-->
+<!--                <el-select-->
+<!--                  v-model="ptzMethod"-->
+<!--                  style="width: 100%"-->
+<!--                  size="mini"-->
+<!--                  placeholder="请选择云台功能"-->
+<!--                >-->
+<!--                  <el-option label="预置点" value="preset" />-->
+<!--                </el-select>-->
 
-                <ptzPreset v-if="ptzMethod === 'preset'" :channel-device-id="channelId" :device-id="deviceId" style="margin-top: 1rem" />
-              </div>
+<!--                <ptzPreset v-if="ptzMethod === 'preset'" :channel-device-id="channelId" :device-id="deviceId" style="margin-top: 1rem" />-->
+<!--              </div>-->
             </div>
           </el-tab-pane>
           <el-tab-pane v-if="showBroadcast" label="语音对讲" name="broadcast">
