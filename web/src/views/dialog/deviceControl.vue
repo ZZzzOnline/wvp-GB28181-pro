@@ -43,9 +43,9 @@
           <!--{"code":0,"data":{"paths":["22-29-30.mp4"],"rootPath":"/home/kkkkk/Documents/ZLMediaKit/release/linux/Debug/www/record/hls/kkkkk/2020-05-11/"}}-->
           <!--遥控界面-->
           <el-tab-pane v-if="showPtz" label="设备控制" name="control" style="display: flex;">
-            <div style="display: grid; grid-template-columns: 6.25rem auto auto auto; ">
+            <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto auto; ">
               <!--云台-->
-              <div>
+              <div style="margin-left: 10px; margin-top: -13px;">
                 <div class="control-wrapper">
                   <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
                     <i class="el-icon-caret-top"/>
@@ -67,7 +67,7 @@
                   </div>
                 </div>
               </div>
-              <div style="margin-left: 10px;">
+              <div style="margin-left: 25px;">
                 <div class="ptz-btn-box">
                   <div style="" title="变倍+" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')">
                     <i class="el-icon-zoom-in control-zoom-btn" style="font-size: 1.5rem;"/>
@@ -95,7 +95,7 @@
               </div>
               <!--轨道机器人圈-->
               <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto;">
-                <div>
+                <div style="margin-left: 10px; margin-top: -13px;">
                   <div class="control-wrapper">
                     <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
                       <i class="el-icon-caret-top"/>
