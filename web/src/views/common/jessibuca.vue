@@ -17,6 +17,7 @@
         <span class="jessibuca-btn">{{ kBps }} kb/s</span>
         <!--          <i class="iconfont icon-file-record1 jessibuca-btn"></i>-->
         <!--          <i class="iconfont icon-xiangqing2 jessibuca-btn" ></i>-->
+        <i class="iconfont icon-shebeileibanqiugis jessibuca-btn" @click="onCallChild" />
         <i
           class="iconfont icon-camera1196054easyiconnet jessibuca-btn"
           style="font-size: 1rem !important"
@@ -34,7 +35,7 @@
 const jessibucaPlayer = {}
 export default {
   name: 'Jessibuca',
-  props: ['videoUrl', 'error', 'hasAudio', 'height'],
+  props: ['videoUrl', 'error', 'hasAudio', 'height', 'on-call-parent'],
   data() {
     return {
       playing: false,
@@ -248,6 +249,10 @@ export default {
       this.playing = false
       this.err = ''
       this.performance = ''
+    },
+    onCallChild: function() {
+      console.log('onCallChild', this._uid)
+      this.$props['onCallParent'](this._uid)
     },
     screenshot: function() {
       if (jessibucaPlayer[this._uid]) {
