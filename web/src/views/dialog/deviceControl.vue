@@ -45,7 +45,7 @@
           <el-tab-pane v-if="showPtz" label="设备控制" name="control" style="display: flex;">
             <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto auto; ">
               <!--云台-->
-              <div style="margin-left: 10px; margin-top: -13px;">
+              <div style="margin-left: 10px; margin-top: -10px;">
                 <div class="control-wrapper">
                   <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
                     <i class="el-icon-caret-top"/>
@@ -95,7 +95,7 @@
               </div>
               <!--轨道机器人圈-->
               <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto;">
-                <div style="margin-left: 10px; margin-top: -13px;">
+                <div style="margin-left: 10px; margin-top: -10px;">
                   <div class="control-wrapper">
                     <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
                       <i class="el-icon-caret-top"/>
