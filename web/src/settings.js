@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'WVP视频平台',
+  title: '益可达轨道巡检系统',
 
   /**
    * @type {boolean} true | false
