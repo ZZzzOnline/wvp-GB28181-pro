@@ -15,12 +15,16 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class InspectRobotsManager {
 
     @Autowired
     private IDeviceService deviceService;
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     // 单例实例
 //    public static final InspectRobotsManager instance = new InspectRobotsManager();
@@ -87,23 +91,28 @@ public class InspectRobotsManager {
                     removeInspectRobot(host);
                 }
             } else {
-                InspectRobot newInspectRobot = new InspectRobot();
-                try {
-                    newInspectRobot.connect(ipAddress, port);
-                } catch (IOException e) {
-                    System.err.println("Failed to connect to " + ipAddress + ":" + port + " - " + e.getMessage());
-                    return;
-                }
-                addInspectRobot(host, newInspectRobot);
-                // 10秒发心跳，30秒没收到回调就断线重连
-                newInspectRobot.startHeartbeatWithHorizontal(10000, 30000);
-                newInspectRobot.startHeartbeatWithVertical(10000, 30000);
+                Runnable connectTask = () -> {
+                    try {
+                        InspectRobot newInspectRobot = new InspectRobot();
+                        newInspectRobot.connect(ipAddress, port);
+                        addInspectRobot(host, newInspectRobot);
+                        // 10秒发心跳，30秒没收到回调就断线重连
+                        newInspectRobot.startHeartbeatWithHorizontal(10000, 30000);
+                        newInspectRobot.startHeartbeatWithVertical(10000, 30000);
+                    } catch (IOException e) {
+                        System.err.println("Failed to connect to " + ipAddress + ":" + port + " - " + e.getMessage());
+                    }
+                };
+                // 线程池提交连接任务
+                executorService.submit(connectTask);
             }
         });
     }
 
     @PreDestroy
     public void shutdown() {
+        executorService.shutdown();
+        // 断开所有设备连接
         inspectRobotsManager.values().forEach(InspectRobot::disconnect);
     }
 
