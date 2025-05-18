@@ -124,8 +124,8 @@
                     <el-input v-model="ptzPresetId" placeholder="请输入编号" style="width: 100px;" />
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" size="mini" @click="clickSetPresetRobot()">设置</el-button>
-                    <el-button type="danger" size="mini" @click="clickGoPresetRobot()">调用</el-button>
+                    <el-button type="primary" size="mini" @click="clickSetPreset();clickSetPresetRobot()">设置</el-button>
+                    <el-button type="danger" size="mini" @click="clickGoPreset();clickGoPresetRobot()">调用</el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -527,7 +527,7 @@ export default {
       this.$store.dispatch('frontEnd/callPreset', [this.deviceId, this.channelId, this.ptzPresetId])
         .then(data => {
           this.$message({
-            message: '调用成功',
+            message: '云台调用成功',
             type: 'success'
           })
         }).catch((error) => {
@@ -576,7 +576,7 @@ export default {
       this.$store.dispatch('frontEnd/callPresetRobot', [this.deviceId, this.channelId, this.ptzPresetId])
         .then(data => {
           this.$message({
-            message: '调用成功',
+            message: '轨道机调用成功',
             type: 'success'
           })
         }).catch((error) => {

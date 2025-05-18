@@ -62,6 +62,7 @@ public interface DeviceMapper {
                 "media_server_id," +
                 "ip," +
                 "sdp_ip," +
+                "ykd_host," +
                 "local_ip," +
                 "port," +
                 "host_address," +
@@ -159,6 +160,7 @@ public interface DeviceMapper {
             "stream_mode," +
             "ip,"+
             "sdp_ip,"+
+            "ykd_host,"+
             "local_ip,"+
             "port,"+
             "host_address,"+
@@ -201,6 +203,7 @@ public interface DeviceMapper {
             "stream_mode," +
             "ip," +
             "sdp_ip,"+
+            "ykd_host,"+
             "local_ip,"+
             "port,"+
             "host_address,"+
@@ -234,6 +237,7 @@ public interface DeviceMapper {
             "stream_mode," +
             "ip," +
             "sdp_ip,"+
+            "ykd_host,"+
             "local_ip,"+
             "port,"+
             "host_address,"+
@@ -268,6 +272,7 @@ public interface DeviceMapper {
             "stream_mode,"+
             "ip,"+
             "sdp_ip,"+
+            "ykd_host,"+
             "local_ip,"+
             "port,"+
             "host_address,"+
@@ -304,6 +309,7 @@ public interface DeviceMapper {
             "custom_name,"+
             "password,"+
             "sdp_ip,"+
+            "ykd_host,"+
             "create_time,"+
             "update_time,"+
             "charset,"+
