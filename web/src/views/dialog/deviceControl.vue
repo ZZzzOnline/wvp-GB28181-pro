@@ -42,8 +42,8 @@
         <el-tabs v-model="tabActiveName" @tab-click="tabHandleClick">
           <!--{"code":0,"data":{"paths":["22-29-30.mp4"],"rootPath":"/home/kkkkk/Documents/ZLMediaKit/release/linux/Debug/www/record/hls/kkkkk/2020-05-11/"}}-->
           <!--遥控界面-->
-          <el-tab-pane v-if="showPtz" label="设备控制" name="control" style="display: flex;">
-            <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto auto; ">
+          <el-tab-pane v-if="showPtz" label="设备控制" name="control">
+            <div style="margin-left: 10px; display: flex; grid-template-columns: 6.25rem auto auto auto; ">
               <!--云台-->
               <div style="margin-left: 10px; margin-top: -10px;">
                 <div class="control-wrapper">
