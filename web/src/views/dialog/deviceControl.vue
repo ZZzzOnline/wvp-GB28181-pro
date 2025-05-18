@@ -121,7 +121,7 @@
               <div style="margin-left: 50px;">
                 <el-form style="display: flex; align-items: center; justify-content: center; height: 100%;">
                   <el-form-item label="公共预置点" label-width="90px" style="margin-right: 20px;">
-                    <el-input v-model="presetPoint" placeholder="请输入编号" style="width: 100px;" />
+                    <el-input v-model="ptzPresetId" placeholder="请输入编号" style="width: 100px;" />
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="mini" @click="clickSetPreset()">设置</el-button>
@@ -487,6 +487,55 @@ export default {
       this.broadcastRtc?.close()
       this.broadcastStatus = -1
       this.$store.dispatch('play/broadcastStop', [this.deviceId, this.channelId])
+    },
+    clickSetPreset() {
+      if (this.ptzPresetId === '') {
+        this.$message({
+          message: '请输入预置位编号',
+          type: 'warning'
+        })
+        return
+      }
+      const loading = this.$loading({
+        lock: true,
+        fullscreen: true,
+        text: '正在发送指令',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      this.$store.dispatch('frontEnd/addPreset', [this.deviceId, this.channelId, this.ptzPresetId])
+        .then(data => {
+          // 设置预置位成功
+        }).catch((error) => {
+          loading.close()
+          this.$message({
+            message: error,
+            type: 'error'
+          })
+        }).finally(() => {
+          loading.close()
+        })
+    },
+    clickGoPreset() {
+      if (this.ptzPresetId === '') {
+        this.$message({
+          message: '请输入预置位编号',
+          type: 'warning'
+        })
+        return
+      }
+      this.$store.dispatch('frontEnd/callPreset', [this.deviceId, this.channelId, this.ptzPresetId])
+        .then(data => {
+          this.$message({
+            message: '调用成功',
+            type: 'success'
+          })
+        }).catch((error) => {
+          this.$message({
+            message: error,
+            type: 'error'
+          })
+        })
     }
   }
 }
