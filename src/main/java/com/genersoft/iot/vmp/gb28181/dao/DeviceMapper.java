@@ -26,6 +26,7 @@ public interface DeviceMapper {
             "stream_mode," +
             "ip," +
             "sdp_ip," +
+            "ykd_host," +
             "local_ip," +
             "port," +
             "host_address," +
