@@ -82,6 +82,9 @@ public class InspectRobotsManager {
             System.out.println(device.getYkdHost());
 //            String host = "192.168.3.244:4196";
             String host = device.getYkdHost();
+            if (host == null || host.isEmpty()) {
+                return;
+            }
             String[] pieces = host.split(":");
             String ipAddress = pieces[0];
             int port = Integer.parseInt(pieces[1]);
