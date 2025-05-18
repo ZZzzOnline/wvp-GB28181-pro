@@ -97,16 +97,16 @@
               <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto;">
                 <div style="margin-left: 10px; margin-top: -10px;">
                   <div class="control-wrapper">
-                    <div class="control-btn control-top" @mousedown="ptzRobot('up')" @mouseup="ptzRobot('stop')">
+                    <div class="control-btn control-top" @mousedown="ptzRobot('up')" @mouseup="ptzRobot2('up')">
                       <i class="el-icon-caret-top"/>
                     </div>
-                    <div class="control-btn control-left" @mousedown="ptzRobot('left')" @mouseup="ptzRobot('stop')">
+                    <div class="control-btn control-left" @mousedown="ptzRobot('left')" @mouseup="ptzRobot2('left')">
                       <i class="el-icon-caret-left"/>
                     </div>
-                    <div class="control-btn control-bottom" @mousedown="ptzRobot('down')" @mouseup="ptzRobot('stop')">
+                    <div class="control-btn control-bottom" @mousedown="ptzRobot('down')" @mouseup="ptzRobot2('down')">
                       <i class="el-icon-caret-bottom"/>
                     </div>
-                    <div class="control-btn control-right" @mousedown="ptzRobot('right')" @mouseup="ptzRobot('stop')">
+                    <div class="control-btn control-right" @mousedown="ptzRobot('right')" @mouseup="ptzRobot2('right')">
                       <i class="el-icon-caret-right"/>
                     </div>
                     <div class="control-round">
@@ -348,6 +348,18 @@ export default {
           parseInt(this.controSpeed * 255 / 100),
           parseInt(this.controSpeed * 255 / 100),
           parseInt(this.controSpeed * 16 / 100)
+        ])
+    },
+    ptzRobot2: function(command) {
+      console.log('轨道机控制：' + command)
+      this.$store.dispatch('frontEnd/ptzRobot',
+        [
+          this.deviceId,
+          this.channelId,
+          command,
+          parseInt(-1),
+          parseInt(-1),
+          parseInt(-1)
         ])
     },
     irisCamera: function(command) {
