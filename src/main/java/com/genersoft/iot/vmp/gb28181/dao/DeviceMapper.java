@@ -291,7 +291,7 @@ public interface DeviceMapper {
     @Update(value = {" <script>" +
             "UPDATE wvp_device " +
             "SET update_time=#{updateTime}, custom_name=#{name} , password=#{password}, stream_mode=#{streamMode}" +
-            ", ip=#{ip}, sdp_ip=#{sdpIp}, port=#{port}, charset=#{charset}" +
+            ", ip=#{ip}, sdp_ip=#{sdpIp}, ykd_host=#{ykdHost}, port=#{port}, charset=#{charset}" +
             ", ssrc_check=#{ssrcCheck}, as_message_channel=#{asMessageChannel}" +
             ", broadcast_push_after_ack=#{broadcastPushAfterAck}, geo_coord_sys=#{geoCoordSys}, media_server_id=#{mediaServerId}" +
             " WHERE id=#{id}"+
@@ -352,6 +352,7 @@ public interface DeviceMapper {
             "stream_mode," +
             "ip,"+
             "sdp_ip,"+
+            "ykd_host,"+
             "local_ip,"+
             "port,"+
             "host_address,"+

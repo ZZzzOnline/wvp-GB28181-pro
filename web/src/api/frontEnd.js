@@ -157,6 +157,29 @@ export function deletePreset([deviceId, channelDeviceId, presetId]) {
 }
 
 /**
+ * 轨道机器人
+ */
+export function addPresetRobot([deviceId, channelDeviceId, presetId]) {
+  return request({
+    method: 'get',
+    url: `/api/front-end/presetRobot/add/${deviceId}/${channelDeviceId}`,
+    params: {
+      presetId: presetId
+    }
+  })
+}
+
+export function callPresetRobot([deviceId, channelDeviceId, presetId]) {
+  return request({
+    method: 'get',
+    url: `/api/front-end/presetRobot/call/${deviceId}/${channelDeviceId}`,
+    params: {
+      presetId: presetId
+    }
+  })
+}
+
+/**
  * command: on 开启， off 关闭
  */
 export function auxiliary([deviceId, channelDeviceId, command, switchId]) {

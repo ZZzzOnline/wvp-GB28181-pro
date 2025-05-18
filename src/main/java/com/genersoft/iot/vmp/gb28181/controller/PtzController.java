@@ -273,6 +273,30 @@ public class PtzController {
 		frontEndCommand(deviceId, channelId, 0x83, 1, presetId, 0);
 	}
 
+	@Operation(summary = "预置位指令-设置预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Parameter(name = "channelId", description = "通道国标编号", required = true)
+	@Parameter(name = "presetId", description = "预置位编号(1-255)", required = true)
+	@GetMapping("/presetRobot/add/{deviceId}/{channelId}")
+	public void addPresetRobot(@PathVariable String deviceId, @PathVariable String channelId, Integer presetId) {
+		if (presetId == null || presetId < 1 || presetId > 255) {
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "预置位编号必须为1-255之间的数字");
+		}
+//		frontEndCommand(deviceId, channelId, 0x81, 1, presetId, 0);
+	}
+
+	@Operation(summary = "预置位指令-调用预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Parameter(name = "channelId", description = "通道国标编号", required = true)
+	@Parameter(name = "presetId", description = "预置位编号(1-255)", required = true)
+	@GetMapping("/presetRobot/call/{deviceId}/{channelId}")
+	public void callPresetRobot(@PathVariable String deviceId, @PathVariable String channelId, Integer presetId) {
+		if (presetId == null || presetId < 1 || presetId > 255) {
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "预置位编号必须为1-255之间的数字");
+		}
+//		frontEndCommand(deviceId, channelId, 0x82, 1, presetId, 0);
+	}
+
 	@Operation(summary = "巡航指令-加入巡航点", security = @SecurityRequirement(name = JwtUtils.HEADER))
 	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
 	@Parameter(name = "channelId", description = "通道国标编号", required = true)

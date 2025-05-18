@@ -1,11 +1,25 @@
 import {
-  addPointForCruise, addPreset, auxiliary, callPreset, deletePointForCruise, deletePreset, focus, iris, ptz,
-  queryPreset, setCruiseSpeed, setCruiseTime,
+  addPointForCruise,
+  addPreset,
+  addPresetRobot,
+  auxiliary,
+  callPreset, callPresetRobot,
+  deletePointForCruise,
+  deletePreset,
+  focus,
+  iris,
+  ptz,
+  queryPreset,
+  setCruiseSpeed,
+  setCruiseTime,
   setLeftForScan,
   setRightForScan,
-  setSpeedForScan, startCruise,
-  startScan, stopCruise,
-  stopScan, wiper
+  setSpeedForScan,
+  startCruise,
+  startScan,
+  stopCruise,
+  stopScan,
+  wiper
 } from '@/api/frontEnd'
 
 const actions = {
@@ -152,6 +166,26 @@ const actions = {
   deletePreset({ commit }, params) {
     return new Promise((resolve, reject) => {
       deletePreset(params).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  addPresetRobot({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      addPresetRobot(params).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  callPresetRobot({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      callPresetRobot(params).then(response => {
         const { data } = response
         resolve(data)
       }).catch(error => {

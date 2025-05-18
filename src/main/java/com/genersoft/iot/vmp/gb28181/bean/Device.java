@@ -26,19 +26,19 @@ public class Device {
 	 */
 	@Schema(description = "名称")
 	private String name;
-	
+
 	/**
 	 * 生产厂商
 	 */
 	@Schema(description = "生产厂商")
 	private String manufacturer;
-	
+
 	/**
 	 * 型号
 	 */
 	@Schema(description = "型号")
 	private String model;
-	
+
 	/**
 	 * 固件版本
 	 */
@@ -78,7 +78,7 @@ public class Device {
 	 */
 	@Schema(description = "wan地址")
 	private String  hostAddress;
-	
+
 	/**
 	 * 在线
 	 */
@@ -197,6 +197,9 @@ public class Device {
 
 	@Schema(description = "收流IP")
 	private String sdpIp;
+
+	@Schema(description = "轨道机服务")
+	private String ykdHost;
 
 	@Schema(description = "SIP交互IP（设备访问平台的IP）")
 	private String localIp;

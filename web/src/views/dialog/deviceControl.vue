@@ -124,8 +124,8 @@
                     <el-input v-model="ptzPresetId" placeholder="请输入编号" style="width: 100px;" />
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" size="mini" @click="clickSetPreset()">设置</el-button>
-                    <el-button type="danger" size="mini" @click="clickGoPreset()">调用</el-button>
+                    <el-button type="primary" size="mini" @click="clickSetPresetRobot()">设置</el-button>
+                    <el-button type="danger" size="mini" @click="clickGoPresetRobot()">调用</el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -525,6 +525,55 @@ export default {
         return
       }
       this.$store.dispatch('frontEnd/callPreset', [this.deviceId, this.channelId, this.ptzPresetId])
+        .then(data => {
+          this.$message({
+            message: '调用成功',
+            type: 'success'
+          })
+        }).catch((error) => {
+          this.$message({
+            message: error,
+            type: 'error'
+          })
+        })
+    },
+    clickSetPresetRobot() {
+      if (this.ptzPresetId === '') {
+        this.$message({
+          message: '请输入预置位编号',
+          type: 'warning'
+        })
+        return
+      }
+      const loading = this.$loading({
+        lock: true,
+        fullscreen: true,
+        text: '正在发送指令',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      this.$store.dispatch('frontEnd/addPresetRobot', [this.deviceId, this.channelId, this.ptzPresetId])
+        .then(data => {
+          // 设置预置位成功
+        }).catch((error) => {
+          loading.close()
+          this.$message({
+            message: error,
+            type: 'error'
+          })
+        }).finally(() => {
+          loading.close()
+        })
+    },
+    clickGoPresetRobot() {
+      if (this.ptzPresetId === '') {
+        this.$message({
+          message: '请输入预置位编号',
+          type: 'warning'
+        })
+        return
+      }
+      this.$store.dispatch('frontEnd/callPresetRobot', [this.deviceId, this.channelId, this.ptzPresetId])
         .then(data => {
           this.$message({
             message: '调用成功',
