@@ -92,7 +92,7 @@ public class InspectRobot {
         synchronized (lock) {
             socket = new Socket(InetAddress.getByName(ipAddress), port);
             socket.setTcpNoDelay(false);
-            socket.setSoTimeout(0); // Infinite timeout
+            socket.setSoTimeout(15000); // 15秒超时
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
             System.out.println("Connected to device.");
