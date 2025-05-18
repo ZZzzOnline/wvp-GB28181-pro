@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InspectRobot {
 
@@ -47,7 +50,7 @@ public class InspectRobot {
     private long currentHigh = 0; // 当前高16位脉冲值
 
     private ExecutorService executorService;
-    private boolean isConnected = false;
+    private volatile boolean isConnected = false;
 
     /**
      * 设备参数设置
@@ -530,5 +533,115 @@ public class InspectRobot {
         }
         return sb.toString();
     }
+
+    /// 心跳检测
+    private final ScheduledExecutorService heartbeatScheduler = Executors.newScheduledThreadPool(2);
+    private final AtomicLong lastHeartbeat = new AtomicLong(System.currentTimeMillis());
+    private volatile boolean reconnecting = false;
+
+    // 自动重连标志
+    public void startHeartbeatWithHorizontal(long queryIntervalMs, long heartbeatTimeoutMs) {
+        // 设置位置回调（只需设置一次即可）
+        this.setOnHorizontalPositionReceivedListener((host, pos) -> lastHeartbeat.set(System.currentTimeMillis()));
+
+        // 每5秒发一次位置查询
+        heartbeatScheduler.scheduleAtFixedRate(() -> {
+            try {
+                if (isConnected) {
+                    queryHorizontalPosition();
+                }
+            } catch (Exception e) {
+                // 这里捕获异常，避免定时任务中断
+                System.out.println("Error during heartbeat query1: " + e.getMessage());
+                isConnected = false;
+            }
+        }, 0, queryIntervalMs, TimeUnit.MILLISECONDS);
+
+        // 每1秒检查一次心跳超时
+        heartbeatScheduler.scheduleAtFixedRate(() -> {
+            if (!isConnected) return;
+            long now = System.currentTimeMillis();
+            if (now - lastHeartbeat.get() > heartbeatTimeoutMs && !reconnecting) {
+                System.out.println("心跳超时，断线: " + host);
+                isConnected = false;
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    // 自动重连标志
+    public void startHeartbeatWithVertical(long queryIntervalMs, long heartbeatTimeoutMs) {
+        // 设置位置回调（只需设置一次即可）
+        this.setOnVerticalPositionReceivedListener((host, pos) -> lastHeartbeat.set(System.currentTimeMillis()));
+
+        // 每5秒发一次位置查询
+        heartbeatScheduler.scheduleAtFixedRate(() -> {
+            try {
+                if (isConnected) {
+                    queryVerticalPosition();
+                }
+            } catch (Exception e) {
+                // 这里捕获异常，避免定时任务中断
+                System.out.println("Error during heartbeat query2: " + e.getMessage());
+                isConnected = false;
+            }
+        }, 0, queryIntervalMs, TimeUnit.MILLISECONDS);
+
+        // 每1秒检查一次心跳超时
+        heartbeatScheduler.scheduleAtFixedRate(() -> {
+            if (!isConnected) return;
+            long now = System.currentTimeMillis();
+            if (now - lastHeartbeat.get() > heartbeatTimeoutMs && !reconnecting) {
+                System.out.println("心跳超时，断线: " + host);
+                isConnected = false;
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    public boolean getConnectionStatus() {
+        return isConnected;
+    }
+
+    // 自动心跳+掉线重连功能
+//    public void startHeartbeatWithAutoReconnect(long queryIntervalMs, long heartbeatTimeoutMs) {
+//        // 设置位置回调（只需设置一次即可）
+//        this.setOnHorizontalPositionReceivedListener((host, pos) -> lastHeartbeat.set(System.currentTimeMillis()));
+//
+//        // 每5秒发一次位置查询
+//        heartbeatScheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                if (isConnected) {
+//                    queryHorizontalPosition();
+//                }
+//            } catch (Exception e) {
+//                // 这里捕获异常，避免定时任务中断
+//            }
+//        }, 0, queryIntervalMs, TimeUnit.MILLISECONDS);
+//
+//        // 每1秒检查一次心跳超时
+//        heartbeatScheduler.scheduleAtFixedRate(() -> {
+//            if (!isConnected) return;
+//            long now = System.currentTimeMillis();
+//            if (now - lastHeartbeat.get() > heartbeatTimeoutMs && !reconnecting) {
+//                System.out.println("心跳超时，准备断线重连: " + host);
+//                reconnecting = true;
+//                try {
+//                    // 断开
+//                    disconnect();
+//                    Thread.sleep(500); // 稍微等待
+//                    // 重连（你的连接参数保存在host里，可自行调整）
+//                    String[] arr = host.split(":");
+//                    String ip = arr[0];
+//                    int port = Integer.parseInt(arr[1]);
+//                    connect(ip, port);
+//                    lastHeartbeat.set(System.currentTimeMillis());
+//                    System.out.println("重连成功: " + host);
+//                } catch (Exception ex) {
+//                    System.out.println("重连失败: " + ex.getMessage());
+//                } finally {
+//                    reconnecting = false;
+//                }
+//            }
+//        }, 1, 1, TimeUnit.SECONDS);
+//    }
 
 }

@@ -10,6 +10,8 @@ import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 import com.genersoft.iot.vmp.vmanager.bean.ErrorCode;
 import com.genersoft.iot.vmp.vmanager.bean.WVPResult;
+import com.genersoft.iot.vmp.ykd.SDK.InspectRobot;
+import com.genersoft.iot.vmp.ykd.SDK.InspectRobotsManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.io.IOException;
 
 @Tag(name  = "前端设备控制")
 @Slf4j
@@ -40,6 +44,9 @@ public class PtzController {
 
 	@Autowired
 	private DeferredResultHolder resultHolder;
+
+	@Autowired
+	private InspectRobotsManager inspectRobotsManager;
 
 	@Operation(summary = "通用前端控制命令(参考国标文档A.3.1指令格式)", security = @SecurityRequirement(name = JwtUtils.HEADER))
 	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
@@ -282,7 +289,18 @@ public class PtzController {
 		if (presetId == null || presetId < 1 || presetId > 255) {
 			throw new ControllerException(ErrorCode.ERROR100.getCode(), "预置位编号必须为1-255之间的数字");
 		}
-//		frontEndCommand(deviceId, channelId, 0x81, 1, presetId, 0);
+		// 轨道机器人
+		InspectRobot inspectRobot = inspectRobotsManager.getInspectRobot("");
+		if (inspectRobot != null) {
+			byte presetByte = (byte) (presetId & 0xFF);
+            try {
+                inspectRobot.setPreset(presetByte);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "设备不存在");
+		}
 	}
 
 	@Operation(summary = "预置位指令-调用预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
@@ -294,7 +312,18 @@ public class PtzController {
 		if (presetId == null || presetId < 1 || presetId > 255) {
 			throw new ControllerException(ErrorCode.ERROR100.getCode(), "预置位编号必须为1-255之间的数字");
 		}
-//		frontEndCommand(deviceId, channelId, 0x82, 1, presetId, 0);
+		// 轨道机器人
+		InspectRobot inspectRobot = inspectRobotsManager.getInspectRobot("");
+		if (inspectRobot != null) {
+			byte presetByte = (byte) (presetId & 0xFF);
+			try {
+				inspectRobot.gotoPreset(presetByte);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "设备不存在");
+		}
 	}
 
 	@Operation(summary = "巡航指令-加入巡航点", security = @SecurityRequirement(name = JwtUtils.HEADER))
