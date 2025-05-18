@@ -52,6 +52,8 @@ public class InspectRobot {
     private ExecutorService executorService;
     private volatile boolean isConnected = false;
 
+    private final Object lock = new Object();
+
     /**
      * 设备参数设置
      *
@@ -87,20 +89,22 @@ public class InspectRobot {
      * @throws IOException 如果连接失败
      */
     public void connect(String ipAddress, int port) throws IOException {
-        socket = new Socket(InetAddress.getByName(ipAddress), port);
-        socket.setTcpNoDelay(false);
-        socket.setSoTimeout(0); // Infinite timeout
-        outputStream = socket.getOutputStream();
-        inputStream = socket.getInputStream();
-        System.out.println("Connected to device.");
+        synchronized (lock) {
+            socket = new Socket(InetAddress.getByName(ipAddress), port);
+            socket.setTcpNoDelay(false);
+            socket.setSoTimeout(0); // Infinite timeout
+            outputStream = socket.getOutputStream();
+            inputStream = socket.getInputStream();
+            System.out.println("Connected to device.");
 
-        isConnected = true;
+            isConnected = true;
 
-        this.host = ipAddress + ":" + port;
+            this.host = ipAddress + ":" + port;
 
-        // 启动异步接收线程
-        executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(this::receiveDataAsync);
+            // 启动异步接收线程
+            executorService = Executors.newSingleThreadExecutor();
+            executorService.submit(this::receiveDataAsync);
+        }
     }
 
     /**
@@ -114,10 +118,12 @@ public class InspectRobot {
      * @throws IOException 如果发送失败
      */
     public void sendCommand(byte address, byte cmd1, byte cmd2, byte data1, byte data2) throws IOException {
-        byte[] command = buildPelcoDCommand(address, cmd1, cmd2, data1, data2);
-        outputStream.write(command);
-        outputStream.flush();
-        System.out.println("Sent: " + bytesToHex(command));
+        synchronized (lock) {
+            byte[] command = buildPelcoDCommand(address, cmd1, cmd2, data1, data2);
+            outputStream.write(command);
+            outputStream.flush();
+            System.out.println("Sent: " + bytesToHex(command));
+        }
     }
 
     /**
@@ -503,21 +509,23 @@ public class InspectRobot {
      * 断开连接
      */
     public void disconnect() {
-        isConnected = false;
+        synchronized (lock) {
+            isConnected = false;
 
-        if (executorService != null) {
-            executorService.shutdown();
+            if (executorService != null) {
+                executorService.shutdown();
+            }
+
+            try {
+                if (outputStream != null) outputStream.close();
+                if (inputStream != null) inputStream.close();
+                if (socket != null) socket.close();
+            } catch (IOException e) {
+                System.out.println("Error during disconnect: " + e.getMessage());
+            }
+
+            System.out.println("Disconnected.");
         }
-
-        try {
-            if (outputStream != null) outputStream.close();
-            if (inputStream != null) inputStream.close();
-            if (socket != null) socket.close();
-        } catch (IOException e) {
-            System.out.println("Error during disconnect: " + e.getMessage());
-        }
-
-        System.out.println("Disconnected.");
     }
 
     /**
@@ -598,7 +606,9 @@ public class InspectRobot {
     }
 
     public boolean getConnectionStatus() {
-        return isConnected;
+        synchronized (lock) {
+            return isConnected;
+        }
     }
 
     // 自动心跳+掉线重连功能

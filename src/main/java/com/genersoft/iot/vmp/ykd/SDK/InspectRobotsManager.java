@@ -1,15 +1,26 @@
 package com.genersoft.iot.vmp.ykd.SDK;
 
+import com.genersoft.iot.vmp.common.enums.ChannelDataType;
+import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.dao.DeviceMapper;
+import com.genersoft.iot.vmp.gb28181.service.IDeviceService;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class InspectRobotsManager {
+
+    @Autowired
+    private IDeviceService deviceService;
 
     // 单例实例
 //    public static final InspectRobotsManager instance = new InspectRobotsManager();
@@ -61,21 +72,34 @@ public class InspectRobotsManager {
     // 定时任务：每30秒检查设备连接状态，自动重连
     @Scheduled(fixedDelay = 30000)
     public void checkAndReconnectDevices() {
-        for (int i = 0; i < 1; i++) {
-            String host = "192.168.3.244:4196";
+
+        PageInfo<Device> all = deviceService.getAll(1, 1000, null, true);
+        all.getList().forEach(device -> {
+            System.out.println(device.getYkdHost());
+//            String host = "192.168.3.244:4196";
+            String host = device.getYkdHost();
+            String[] pieces = host.split(":");
+            String ipAddress = pieces[0];
+            int port = Integer.parseInt(pieces[1]);
             InspectRobot inspectRobot = getInspectRobot(host);
             if (inspectRobot != null) {
-                if(!inspectRobot.getConnectionStatus()){
+                if (!inspectRobot.getConnectionStatus()) {
                     removeInspectRobot(host);
                 }
             } else {
                 InspectRobot newInspectRobot = new InspectRobot();
+                try {
+                    newInspectRobot.connect(ipAddress, port);
+                } catch (IOException e) {
+                    System.err.println("Failed to connect to " + ipAddress + ":" + port + " - " + e.getMessage());
+                    return;
+                }
                 addInspectRobot(host, newInspectRobot);
                 // 10秒发心跳，30秒没收到回调就断线重连
-                newInspectRobot.startHeartbeatWithHorizontal(10000,30000);
-                newInspectRobot.startHeartbeatWithVertical(10000,30000);
+                newInspectRobot.startHeartbeatWithHorizontal(10000, 30000);
+                newInspectRobot.startHeartbeatWithVertical(10000, 30000);
             }
-        }
+        });
     }
 
     @PreDestroy
