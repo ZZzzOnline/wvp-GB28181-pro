@@ -97,16 +97,16 @@
               <div style="margin-left: 10px; display: grid; grid-template-columns: 6.25rem auto auto;">
                 <div style="margin-left: 10px; margin-top: -10px;">
                   <div class="control-wrapper">
-                    <div class="control-btn control-top" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
+                    <div class="control-btn control-top" @mousedown="ptzRobot('up')" @mouseup="ptzRobot('stop')">
                       <i class="el-icon-caret-top"/>
                     </div>
-                    <div class="control-btn control-left" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
+                    <div class="control-btn control-left" @mousedown="ptzRobot('left')" @mouseup="ptzRobot('stop')">
                       <i class="el-icon-caret-left"/>
                     </div>
-                    <div class="control-btn control-bottom" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
+                    <div class="control-btn control-bottom" @mousedown="ptzRobot('down')" @mouseup="ptzRobot('stop')">
                       <i class="el-icon-caret-bottom"/>
                     </div>
-                    <div class="control-btn control-right" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
+                    <div class="control-btn control-right" @mousedown="ptzRobot('right')" @mouseup="ptzRobot('stop')">
                       <i class="el-icon-caret-right"/>
                     </div>
                     <div class="control-round">
@@ -329,6 +329,18 @@ export default {
     ptzCamera: function(command) {
       console.log('云台控制：' + command)
       this.$store.dispatch('frontEnd/ptz',
+        [
+          this.deviceId,
+          this.channelId,
+          command,
+          parseInt(this.controSpeed * 255 / 100),
+          parseInt(this.controSpeed * 255 / 100),
+          parseInt(this.controSpeed * 16 / 100)
+        ])
+    },
+    ptzRobot: function(command) {
+      console.log('轨道机控制：' + command)
+      this.$store.dispatch('frontEnd/ptzRobot',
         [
           this.deviceId,
           this.channelId,

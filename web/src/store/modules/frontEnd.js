@@ -8,7 +8,7 @@ import {
   deletePreset,
   focus,
   iris,
-  ptz,
+  ptz, ptzRobot,
   queryPreset,
   setCruiseSpeed,
   setCruiseTime,
@@ -216,6 +216,16 @@ const actions = {
   ptz({ commit }, params) {
     return new Promise((resolve, reject) => {
       ptz(params).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  ptzRobot({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      ptzRobot(params).then(response => {
         const { data } = response
         resolve(data)
       }).catch(error => {

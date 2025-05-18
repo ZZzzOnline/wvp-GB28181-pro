@@ -218,6 +218,19 @@ export function ptz([deviceId, channelId, command, horizonSpeed, verticalSpeed, 
   })
 }
 
+export function ptzRobot([deviceId, channelId, command, horizonSpeed, verticalSpeed, zoomSpeed]) {
+  return request({
+    method: 'get',
+    url: `/api/front-end/ptzRobot/${deviceId}/${channelId}`,
+    params: {
+      command: command,
+      horizonSpeed: horizonSpeed,
+      verticalSpeed: verticalSpeed,
+      zoomSpeed: zoomSpeed
+    }
+  })
+}
+
 export function iris([deviceId, channelId, command, speed]) {
   return request({
     method: 'get',

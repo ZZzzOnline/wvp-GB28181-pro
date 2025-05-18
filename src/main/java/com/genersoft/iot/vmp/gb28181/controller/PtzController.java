@@ -151,6 +151,78 @@ public class PtzController {
         frontEndCommand(deviceId, channelId, cmdCode, horizonSpeed, verticalSpeed, zoomSpeed);
     }
 
+    @Operation(summary = "轨道机控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
+    @Parameter(name = "channelId", description = "通道国标编号", required = true)
+    @Parameter(name = "command", description = "控制指令,允许值: left, right, up, down, upleft, upright, downleft, downright, zoomin, zoomout, stop", required = true)
+    @Parameter(name = "horizonSpeed", description = "水平速度(0-255)", required = true)
+    @Parameter(name = "verticalSpeed", description = "垂直速度(0-255)", required = true)
+    @Parameter(name = "zoomSpeed", description = "缩放速度(0-15)", required = true)
+    @GetMapping("/ptzRobot/{deviceId}/{channelId}")
+    public void ptzRobot(@PathVariable String deviceId, @PathVariable String channelId, String command, Integer horizonSpeed, Integer verticalSpeed, Integer zoomSpeed) {
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("设备云台控制 API调用，deviceId：%s ，channelId：%s ，command：%s ，horizonSpeed：%d ，verticalSpeed：%d ，zoomSpeed：%d", deviceId, channelId, command, horizonSpeed, verticalSpeed, zoomSpeed));
+        }
+        if (horizonSpeed == null) {
+            horizonSpeed = 100;
+        } else if (horizonSpeed < 0 || horizonSpeed > 255) {
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "horizonSpeed 为 0-255的数字");
+        }
+        if (verticalSpeed == null) {
+            verticalSpeed = 100;
+        } else if (verticalSpeed < 0 || verticalSpeed > 255) {
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "verticalSpeed 为 0-255的数字");
+        }
+        if (zoomSpeed == null) {
+            zoomSpeed = 16;
+        } else if (zoomSpeed < 0 || zoomSpeed > 15) {
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "zoomSpeed 为 0-15的数字");
+        }
+
+        int cmdCode = 0;
+        switch (command) {
+            case "left":
+                cmdCode = 2;
+                break;
+            case "right":
+                cmdCode = 1;
+                break;
+            case "up":
+                cmdCode = 8;
+                break;
+            case "down":
+                cmdCode = 4;
+                break;
+            case "upleft":
+                cmdCode = 10;
+                break;
+            case "upright":
+                cmdCode = 9;
+                break;
+            case "downleft":
+                cmdCode = 6;
+                break;
+            case "downright":
+                cmdCode = 5;
+                break;
+            case "zoomin":
+                cmdCode = 16;
+                break;
+            case "zoomout":
+                cmdCode = 32;
+                break;
+            case "stop":
+                horizonSpeed = 0;
+                verticalSpeed = 0;
+                zoomSpeed = 0;
+                break;
+            default:
+                break;
+        }
+        frontEndCommand(deviceId, channelId, cmdCode, horizonSpeed, verticalSpeed, zoomSpeed);
+    }
+
 
     @Operation(summary = "光圈控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @Parameter(name = "deviceId", description = "设备国标编号", required = true)
